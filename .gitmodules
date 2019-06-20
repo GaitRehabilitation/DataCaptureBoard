@@ -1,0 +1,6 @@
+[submodule "hardware/OPL_Kicad_Library"]
+	path = hardware/OPL_Kicad_Library
+	url = git@github.com:Seeed-Studio/OPL_Kicad_Library.git
+[submodule "hardware/digikey-kicad-library"]
+	path = hardware/digikey-kicad-library
+	url = git@github.com:digikey/digikey-kicad-library.git

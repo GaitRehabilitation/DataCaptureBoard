@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name extra)(type Legacy)(uri ${KIPRJMOD}/extra/extra.lib)(options "")(descr ""))
+  (lib (name bed-sensor-rescue)(type Legacy)(uri ${KIPRJMOD}/bed-sensor-rescue.lib)(options "")(descr ""))
+)

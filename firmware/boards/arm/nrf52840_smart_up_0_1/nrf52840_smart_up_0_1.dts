@@ -1,0 +1,149 @@
+/*
+ * Copyright (c) 2017 Linaro Limited
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+#include <nordic/nrf52840_qiaa.dtsi>
+
+/ {
+	model = "Smart Up Revison 0.1";
+	compatible = "nordic,smart_up_0_1", "nordic,nrf52840-qiaa",
+		     "nordic,nrf52840";
+
+	chosen {
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &slot0_partition;
+	};
+
+	/* These aliases are provided for compatibility with samples */
+	aliases {
+		buzzer = &pwm0;
+		neo-pixel = &spi1;
+	};
+};
+
+&adc {
+	status ="ok";
+};
+
+&gpiote {
+	status ="ok";
+};
+
+&gpio0 {
+	status ="ok";
+};
+
+&gpio1 {
+	status ="ok";
+};
+
+
+&pwm0 {
+	status = "ok";
+	ch0-pin = <15>;
+	ch0-inverted;
+};
+
+
+&i2c0 {
+	status = "ok";
+	sda-pin = <5>;
+	scl-pin = <26>;
+	icm20948@69{
+        compatible = "tdk,icm20948";
+        reg = <0x69>;
+        label = "icm20948";
+    };
+};
+
+&i2c1 {
+	status = "ok";
+	sda-pin = <20>;
+	scl-pin = <13>;
+	bmp280@76 {
+        compatible = "bosch,bme280";
+        reg = <0x76>;
+        label = "BMP280";
+    };
+};
+
+
+&spi2 {
+	status = "ok";
+	sck-pin = <7>;
+	mosi-pin = <47>;
+	miso-pin = <8>;
+	ws2812@0 {
+		compatible = "worldsemi,ws2812";
+		reg = <0>;
+		spi-max-frequency = <5250000>;
+		label = "WS2812";
+	};
+};
+
+&spi3 {
+    status = "ok";
+    sck-pin = <40>;
+    mosi-pin = <21>;
+    miso-pin = <16>;
+    cs-gpios = <&gpio0 18 0>;
+
+    sdhc0: sdhc@0 {
+        compatible = "zephyr,mmc-spi-slot";
+        status = "ok";
+        reg = <0>;
+        spi-max-frequency = <24000000>;
+    };
+};
+
+
+
+
+&flash0 {
+	/*
+	 * For more information, see:
+	 * http://docs.zephyrproject.org/latest/guides/dts/index.html#flash-partitions
+	 */
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		boot_partition: partition@0 {
+			label = "mcuboot";
+			reg = <0x000000000 0x0000C000>;
+		};
+		slot0_partition: partition@c000 {
+			label = "image-0";
+			reg = <0x0000C000 0x000067000>;
+		};
+		slot1_partition: partition@73000 {
+			label = "image-1";
+			reg = <0x00073000 0x000067000>;
+		};
+		scratch_partition: partition@da000 {
+			label = "image-scratch";
+			reg = <0x000da000 0x0001e000>;
+		};
+
+		/*
+		 * The flash starting at 0x000f8000 and ending at
+		 * 0x000fffff is reserved for use by the application.
+		 */
+
+		/* Storage partition will be used by FCB/NFFS/NVS if enabled. */
+		storage_partition: partition@f8000 {
+			label = "storage";
+			reg = <0x000f8000 0x00008000>;
+		};
+	};
+};
+
+&usbd {
+	compatible = "nordic,nrf-usbd";
+	status = "ok";
+};
