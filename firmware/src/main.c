@@ -8,7 +8,7 @@
 #include <misc/util.h>
 
 // #include "neo_pixel.h"
-
+#include "store.h"
 #include <logging/log.h>
 LOG_MODULE_REGISTER(main);
 
@@ -86,10 +86,10 @@ void main(void)
 	// 		return;
 	// 	}
 
-	// 	sensor_channel_get(icm20948_dev, SENSOR_CHAN_ACCEL_XYZ, &accel);
-	// 	printf("AX=%10.2f AY=%10.2f AZ=%10.2f (m/s^2)\n",
-	// 			sensor_value_to_double(&accel[0]),
-	// 			sensor_value_to_double(&accel[1]),
-	// 			sensor_value_to_double(&accel[2]));
+		// sensor_channel_get(icm20948_dev, SENSOR_CHAN_ACCEL_XYZ, &accel);
+		// printf("AX=%10.2f AY=%10.2f AZ=%10.2f (m/s^2)\n",
+		// 		sensor_value_to_double(&accel[0]),
+		// 		sensor_value_to_double(&accel[1]),
+		// 		sensor_value_to_double(&accel[2]));
 	// }
 }
