@@ -2,17 +2,18 @@
 #define SMART_UP_SENSORS_STORE__H
 
 #include <zephyr.h>
-
+#include <sensor.h>
 #define BLOCK_SIZE 512
+#define BLOCK_QUEUE_SIZE 10
 
-const char MAGIC[4] = {0x10,0x12,0xe,0x11};
 enum file_version { 
     DATA_CAPTURE_0_1 = 1,
 };
 
 enum payload_type {
     ACC_XYZ = (u16_t)1,
-    GYRO_XYZ
+    GYRO_XYZ,
+    ACC_GYRO_XYZ
 };
 
 struct data_t {
@@ -48,9 +49,8 @@ struct header_payload_block{
 
 
 struct header_payload* getHeader();
-void init();
-void start_sessions(char token[50]);
-void push_payload(struct sensor_value* value);
+void start_sessions(char token[50], char file_name[100]);
+void push_payload(struct sensor_value* value, enum payload_type type);
 
 
 #endif
