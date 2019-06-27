@@ -51,7 +51,7 @@ int start_session(const char* name,const char* token)
     header->size = sizeof(struct header_t) - sizeof(u16_t);
 
     char file[250];
-    sprintf(file,"%s.cap");
+    sprintf(file,"%s.cap",name);
     if (fs_open(m_file, file))
     {
         LOG_ERR("Failed to Open file!");

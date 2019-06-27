@@ -1,4 +1,3 @@
-#ifndef SMART_UP_SENSORS_STORE__H
 #ifndef SMART_UP_SENSOR_STORE__h
 #define SMART_UP_SENSOR_STORE__h
 
