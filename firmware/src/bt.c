@@ -1,3 +1,5 @@
+#include "gatt/battery_gatt.h"
+
 #include <zephyr/types.h>
 #include <stddef.h>
 #include <string.h>
@@ -58,6 +60,8 @@ static void bt_ready(int err){
     }
 
     printk("Bluetooth Initialized\n");
+
+    batt_gatt();
 
     err = bt_le_adv_start(BT_LE_ADV_CONN_NAME,ad,ARRAY_SIZE(ad),NULL,0);
     if(err) {
