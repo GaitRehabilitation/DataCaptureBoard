@@ -21,6 +21,10 @@ struct header_t{
 };
 
 int file_store_init();
+/**
+ *  @name name of the file to create
+ *  @token hash token to identify data, note token limit is 10 characters
+ */
 int start_session(const char* name,const char* token);
 void close_session();
 void push_payload(struct sensor_value* value, enum payload_type type);

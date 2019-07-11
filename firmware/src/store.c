@@ -20,7 +20,7 @@ static struct fs_mount_t mp = {
 
 // static const char *disk_mount_pt = "/SD:";
 static struct header_t m_header;
-static struct fs_file_t *m_file;
+static struct fs_file_t *m_file = NULL;
 //
 
 bool m_start_session = false;
@@ -37,10 +37,11 @@ int file_store_init(){
 }
 
 
-int start_session(const char* name,const char* token)
+int start_session(const char* sname,const char* token)
 {
     struct header_t *header = &m_header;
-    strncpy(header->token,token,strlen(token));
+    // don't include \0 character 
+    strncpy(header->token,token,10);
 
     header->magic[0] = 0x10;
     header->magic[1] = 0x12;
@@ -67,10 +68,14 @@ void close_session()
 {
     m_start_session = false;
     fs_close(m_file);
+    m_file = NULL;
 }
 
 void push_payload(struct sensor_value *value, enum payload_type type)
 {
+    if(!m_file){
+        return;
+    }
     u16_t llength = 0;
     switch (type)
     {
@@ -86,4 +91,5 @@ void push_payload(struct sensor_value *value, enum payload_type type)
     default:
         break;
     }
+
 }

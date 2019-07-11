@@ -1,3 +1,6 @@
+#ifndef SMART_UP_DEVICE_BT__h
+#define SMART_UP_DEVICE_BT__h
+
 #include <stdbool.h>
 #include <zephyr/types.h>
 #include <stddef.h>
@@ -13,7 +16,6 @@
 #include <bluetooth/uuid.h>
 #include <bluetooth/gatt.h>
 
-
-
-
 int bluetooth_init();
+
+#endif

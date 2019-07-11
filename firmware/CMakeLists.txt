@@ -8,4 +8,9 @@ project(smart-up)
 target_sources(app PRIVATE 
 src/main.c 
 src/store.c 
+src/bt.c
+src/gatt/battery_gatt.c
+src/gatt/data_logger_gatt.c
 src/device_targets.c)
+
+target_include_directories(app PRIVATE src)

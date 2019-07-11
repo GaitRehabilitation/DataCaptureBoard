@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
       routes: {
-        '/search': (context) => BluetoothSearchRoute()
+        '/search': (context) => BluetoothSearchRoute()I
       },
     );
   }

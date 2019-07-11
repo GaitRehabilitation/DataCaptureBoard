@@ -1,4 +1,7 @@
+#include "bt.h"
+
 #include "gatt/battery_gatt.h"
+#include "gatt/data_logger_gatt.h"
 
 #include <zephyr/types.h>
 #include <stddef.h>
@@ -14,8 +17,6 @@
 #include <bluetooth/uuid.h>
 #include <bluetooth/gatt.h>
 
-#include <gatt/hrs.h>
-#include <gatt/bas.h>
 
 
 static struct bt_conn *default_conn;
@@ -61,7 +62,8 @@ static void bt_ready(int err){
 
     printk("Bluetooth Initialized\n");
 
-    batt_gatt();
+    batt_gatt_init();
+    data_logger_gatt_init();
 
     err = bt_le_adv_start(BT_LE_ADV_CONN_NAME,ad,ARRAY_SIZE(ad),NULL,0);
     if(err) {
@@ -76,9 +78,8 @@ int bluetooth_init(){
     int err = bt_enable(bt_ready);
     if(err){
         printk("Bluetooth init failed (err %d)\n",err);
-        return;
+        return -EINVAL;
     }
 
 	bt_conn_cb_register(&conn_callbacks);
-
 }
