@@ -10,7 +10,8 @@ enum file_version {
 
 enum payload_type {
     ACC_XYZ = (u16_t)1,
-    GYRO_XYZ
+    GYRO_XYZ,
+    ACC_GYRO_XYZ
 };
 
 struct header_t{

@@ -23,7 +23,10 @@ static ssize_t write_logger_config(struct bt_conn *conn,
         case START_LOGGING:
         {
             struct start_logging_payload* payload = &value->payload.start_logging;
-
+            payload->name[124] = '\0';
+            if(start_logging(payload->name,payload->token)){
+                return BT_GATT_ERR(BT_ATT_ERR_NOT_SUPPORTED);
+            }
         }
             break;
         case STOP_LOGGING:

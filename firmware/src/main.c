@@ -25,4 +25,8 @@ void main(void)
 	bluetooth_init();
 	file_store_init();
 	printk("end init");
+
+	while (1) {
+		k_sleep(MSEC_PER_SEC);
+	}
 }

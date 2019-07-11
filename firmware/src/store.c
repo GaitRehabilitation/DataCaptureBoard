@@ -37,7 +37,7 @@ int file_store_init(){
 }
 
 
-int start_session(const char* sname,const char* token)
+int start_session(const char* name,const char* token)
 {
     struct header_t *header = &m_header;
     // don't include \0 character 
@@ -87,6 +87,17 @@ void push_payload(struct sensor_value *value, enum payload_type type)
         fs_write(m_file,&value[0],sizeof(struct sensor_value));
         fs_write(m_file,&value[1],sizeof(struct sensor_value));
         fs_write(m_file,&value[2],sizeof(struct sensor_value));
+        break;
+    case ACC_GYRO_XYZ:
+        llength = sizeof(struct sensor_value) * 6 + sizeof(enum payload_type);
+        fs_write(m_file,&llength,sizeof(u16_t));
+        fs_write(m_file,&type,sizeof(enum payload_type));
+        fs_write(m_file,&value[0],sizeof(struct sensor_value));
+        fs_write(m_file,&value[1],sizeof(struct sensor_value));
+        fs_write(m_file,&value[2],sizeof(struct sensor_value));
+        fs_write(m_file,&value[3],sizeof(struct sensor_value));
+        fs_write(m_file,&value[4],sizeof(struct sensor_value));
+        fs_write(m_file,&value[5],sizeof(struct sensor_value));
         break;
     default:
         break;

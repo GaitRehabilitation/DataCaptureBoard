@@ -29,7 +29,7 @@ struct start_logging_payload
 {
     u32_t unix_time;
     char token[10];
-    char name[25];
+    char name[125];
 } __packed;
 
 struct session_config
