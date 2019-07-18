@@ -1,6 +1,7 @@
 #include "device_targets.h"
 #include <sensor.h>
 #include <led_strip.h>
+#include <pwm.h>
 
 static struct device* bmp280_dev;
 static struct device* icm20948_dev;
@@ -29,7 +30,7 @@ int init_icm20948(){
 
 int init_neo_pixel(){
     neo_pixel_dev = device_get_binding(NEO_STRIP_DEVICE);
-    if(neo_pixel_dev){
+    if(neo_pixel_dev == NULL){
         printk("could not get neo_pixel device\n");
 		return -EINVAL;    
 	}
@@ -41,7 +42,8 @@ int init_neo_pixel(){
 int init_pwm(){
     pwm_device = device_get_binding(PWM_DEVICE);
     if(pwm_device == NULL){
-        printk("Could not get buzzer device\n");
+        printk("Could not get buzzer device \n");
+        return -EINVAL;
     }
     printk("dev %p name %s\n", pwm_device, pwm_device->config->name);
     return 0;

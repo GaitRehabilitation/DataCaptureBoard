@@ -1,3 +1,4 @@
+import 'package:app/presentation/sensor_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -12,8 +13,16 @@ class HomeState extends StatelessWidget {
       body: Center(
         child:
         Column(
-
             children: <Widget>[
+              SensorList(),
+              RaisedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/search');
+                },
+                child: Text(
+                  "Add Device"
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[

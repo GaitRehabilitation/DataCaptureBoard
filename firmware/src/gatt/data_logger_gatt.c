@@ -36,14 +36,10 @@ static ssize_t write_logger_config(struct bt_conn *conn,
         {
             char* payload = value->payload.text_payload;
             payload[199] = '\0';
-            
-            
         }
             break;
-        case NONE:
-
         default:
-            break;
+            return BT_GATT_ERR(BT_ATT_ERR_NOT_SUPPORTED);
     }
     return len;   
 }

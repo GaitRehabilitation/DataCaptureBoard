@@ -14,7 +14,7 @@ static volatile u8_t is_logging = false;
 
 static void logging_thread(void * u1, void * u2, void * u3){
     // set pixel to blue to tell that the logger is logging
-    set_pixel_color(0,0,50);
+    set_pixel_color(0,0,20);
 
     while(is_logging){
         k_sleep((s32_t)((1.0/250.0) * 1000000.0));
@@ -28,6 +28,11 @@ static void logging_thread(void * u1, void * u2, void * u3){
 
     // clear when finished
     set_pixel_color(0,0,0);
+}
+
+int stop_logging(){
+    is_logging = false;
+    return 0;
 }
 
 int start_logging(const char* name, const char* token) {

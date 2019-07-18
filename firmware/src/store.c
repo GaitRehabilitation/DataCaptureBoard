@@ -25,14 +25,48 @@ static struct fs_file_t *m_file = NULL;
 
 bool m_start_session = false;
 
+static const char *disk_mount_pt = "/SD:";
 
 int file_store_init(){
-    static const char *disk_pdrv = "SD";
-    if (disk_access_init(disk_pdrv) != 0)
-    {
-        LOG_ERR("Storage init ERROR!");
-        return -EINVAL;
+    do {
+		static const char *disk_pdrv = "SD";
+		u64_t memory_size_mb;
+		u32_t block_count;
+		u32_t block_size;
+		if (disk_access_init(disk_pdrv) != 0) {
+			LOG_ERR("Storage init ERROR!");
+			break;
+		}
+
+		if (disk_access_ioctl(disk_pdrv,
+				DISK_IOCTL_GET_SECTOR_COUNT, &block_count)) {
+			LOG_ERR("Unable to get sector count");
+			break;
+		}
+		LOG_INF("Block count %u", block_count);
+
+		if (disk_access_ioctl(disk_pdrv,
+				DISK_IOCTL_GET_SECTOR_SIZE, &block_size)) {
+			LOG_ERR("Unable to get sector size");
+			break;
+		}
+		printk("Sector size %u\n", block_size);
+
+		memory_size_mb = (u64_t)block_count * block_size;
+		printk("Memory Size(MB) %u\n", (u32_t)memory_size_mb>>20);
+	} while (0);
+    
+    mp.mnt_point = disk_mount_pt;
+    int res = fs_mount(&mp);
+    if(res == FR_OK){
+        printk("Disk mounted.\n");
     }
+    else
+    {
+        printk("Error mounting disk.\n");
+    }
+    
+
     return 0;
 }
 

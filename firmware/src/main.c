@@ -16,14 +16,13 @@
 
 void main(void)
 {
-	printk("start init");
+	printk("start init \n");
+	file_store_init();
 	init_pwm();
 	init_bme280();
 	init_icm20948();
 	init_neo_pixel();
-	init_pwm();
 	bluetooth_init();
-	file_store_init();
 	printk("end init");
 
 	while (1) {
