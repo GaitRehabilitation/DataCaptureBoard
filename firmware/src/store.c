@@ -3,7 +3,7 @@
 #include <device.h>
 #include <disk_access.h>
 #include <logging/log.h>
-#include <fs.h>
+#include <fs/fs.h>
 #include <ff.h>
 #include <stdio.h>
 
@@ -28,6 +28,7 @@ bool m_start_session = false;
 static const char *disk_mount_pt = "/SD:";
 
 int file_store_init(){
+
     do {
 		static const char *disk_pdrv = "SD";
 		u64_t memory_size_mb;

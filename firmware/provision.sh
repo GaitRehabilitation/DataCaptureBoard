@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export ZSDK_VERSION=0.10.0
+export ZSDK_VERSION=0.10.1
 export GCC_ARM_NAME=gcc-arm-none-eabi-7-2018-q2-update
 export DEBIAN_FRONTEND=noninteractive
 

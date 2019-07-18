@@ -72,7 +72,7 @@
 };
 
 
-&spi2 {
+&spi3 {
 	status = "ok";
 	sck-pin = <7>;
 	mosi-pin = <47>;
@@ -85,12 +85,12 @@
 	};
 };
 
-&spi3 {
+&spi2 {
     status = "ok";
     sck-pin = <40>;
     mosi-pin = <21>;
     miso-pin = <16>;
-    cs-gpios = <&gpio0 36 0>;
+    cs-gpios = <&gpio1 36 0>;
 
     sdhc0: sdhc@0 {
         compatible = "zephyr,mmc-spi-slot";
