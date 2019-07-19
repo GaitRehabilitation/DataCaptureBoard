@@ -15,28 +15,28 @@ class HomeState extends StatelessWidget {
         Column(
             children: <Widget>[
               SensorList(),
-              RaisedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/search');
-                },
-                child: Text(
-                  "Add Device"
-                ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: RaisedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/search');
+                  },
+                  child: Text(
+                      "Add Sensor"
+                  ),
+                )
               ),
+              Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  RaisedButton(
-                    onPressed: () {},
-                    child: Text(
-                        'Start'
-                    ),
-                  ),
-                  RaisedButton(
-                    onPressed: () {},
-                    child: Text(
-                        'Stop'
-                    ),
+                  Expanded(child:
+                    RaisedButton(
+                      onPressed: () {},
+                      child: Text(
+                          'Start'
+                      ),
+                    )
                   )
                 ],
               )
