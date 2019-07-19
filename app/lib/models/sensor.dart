@@ -23,8 +23,13 @@ class Sensor {
     _device.disconnect();
   }
 
-  hasService(Guid uuid){
+  bool hasService(Guid uuid){
     return _services.containsKey(uuid);
+  }
+
+
+  BluetoothService getService(Guid uuid){
+    return _services[uuid];
   }
 
   BluetoothDevice get device{
