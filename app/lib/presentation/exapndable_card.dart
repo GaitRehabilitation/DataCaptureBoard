@@ -13,25 +13,28 @@ class ExpandableCard extends StatefulWidget{
 }
 
 class _ExpandableCardState extends State<ExpandableCard> {
-  bool _toggle;
+  bool _toggle = false;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> widgets = [];
+    if (_toggle) {
+      widgets.add(widget.child);
+    }
     widgets.add(FlatButton(
       onPressed: () {
         setState(() {
-          _toggle != _toggle;
+          _toggle = !_toggle;
         });
       },
       child: Text("Toggle"),
     ));
-    if (_toggle) {
-      widgets.add(widget.child);
-    }
-    return Card(
-        child:
-        Column(children: widgets)
+
+    return Row(
+      children: <Widget>[
+        Expanded(child:
+        Column(children: widgets))
+      ],
     );
   }
 }

@@ -2,9 +2,10 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:developer' as developer;
 
 
-class Sensor {
+abstract class Sensor {
   BluetoothDevice _device = null;
   Map<Guid,BluetoothService> _services = Map();
+  bool isExpanded = false;
 
   Sensor(BluetoothDevice device): _device = device {
   }

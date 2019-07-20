@@ -3,32 +3,47 @@ import 'package:app/store/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 
 
-class SensorList extends StatelessWidget {
+class SensorList extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() => _SensorList();
+
+}
+
+class _SensorList extends State<SensorList> {
   @override
   Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+        child: _buildPanel(),
+      ),
+    );
+  }
+
+  Widget _buildPanel() {
     return StoreConnector<AppState, List<Sensor>>(
         converter: (store) {
           return store.state.sensors;
         },
-        builder: (context, vm) {
-          List<Widget> tiles = [];
-          for (Sensor sensor in vm) {
-            tiles.add(_tile(sensor));
-          }
-          return Column(children: tiles);
-        }
-    );
+        builder: (context, List<Sensor> vm) {
+          List<ExpansionPanel>  panels = vm.map<ExpansionPanel>((Sensor sensor){
+            return new ExpansionPanel(headerBuilder: (BuildContext context, bool isExpanded){
+              return ListTile(
+                title: Text(sensor.device.id.toString()),
+              );
+            }, body: ListTile(
+              title: Text(sensor.device.id.toString()),
+            ));
+          });
+
+        return ExpansionPanelList(
+            expansionCallback: (int index, bool isExpanded) {
+              return vm[index].isExpanded;
+
+            },
+            children: panels
+        );
+      });
   }
-
-  Widget _tile(Sensor sensor) =>
-      Text(sensor.deviceId.toString(),
-        style: TextStyle(
-            fontWeight: FontWeight.w300,
-            fontSize: 20
-        ),
-      );
 }
-

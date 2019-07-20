@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
+import 'models/gait_data_capture.dart';
 import 'models/sensor.dart';
 
 class BluetoothSearchRoute extends StatefulWidget {
@@ -58,8 +59,6 @@ class _BluetoothSearchRouteState extends State<BluetoothSearchRoute> {
         for(Sensor s in mv.sensors){
           identifiers.add(s.device.id);
         }
-
-
         List<ListTile> tiles = [];
         this._devices.forEach((key, value) {
           if(!identifiers.contains(key)) {
@@ -87,7 +86,7 @@ class _BluetoothSearchRouteState extends State<BluetoothSearchRoute> {
         ),
       ),
       onTap: () {
-        callback(new Sensor(device));
+        callback(GaitDataCapture(device));
         Navigator.pop(context);
       },
     );

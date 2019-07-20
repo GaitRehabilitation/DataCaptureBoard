@@ -30,8 +30,10 @@ static ssize_t write_logger_config(struct bt_conn *conn,
         }
             break;
         case STOP_LOGGING:
-
-            break;
+            if(stop_logging()){
+                return BT_GATT_ERR(BT_ATT_ERR_NOT_SUPPORTED);
+            }
+        break;
         case SET_DESCRIPTION: 
         {
             char* payload = value->payload.text_payload;
