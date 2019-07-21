@@ -20,7 +20,8 @@ static struct fs_mount_t mp = {
 
 // static const char *disk_mount_pt = "/SD:";
 static struct header_t m_header;
-static struct fs_file_t *m_file = NULL;
+static struct fs_file_t m_file;
+
 //
 
 bool m_start_session = false;
@@ -28,7 +29,7 @@ bool m_start_session = false;
 static const char *disk_mount_pt = "/SD:";
 
 int file_store_init(){
-
+    m_file.mp = NULL;
     do {
 		static const char *disk_pdrv = "SD";
 		u64_t memory_size_mb;
@@ -66,7 +67,6 @@ int file_store_init(){
     {
         printk("Error mounting disk.\n");
     }
-    
 
     return 0;
 }
@@ -86,14 +86,24 @@ int start_session(const char* name,const char* token)
     header->version = DATA_CAPTURE_0_1;
     header->size = sizeof(struct header_t) - sizeof(u16_t);
 
-    char file[250];
-    sprintf(file,"%s.cap",name);
-    if (fs_open(m_file, file))
+    printk("name: %s \n", name);
+
+    char token_result[5];
+    strncpy(token_result,token,3);
+    char target_file[250];
+    sprintf(target_file,"/SD:/%s_%s.cap",token_result,name);
+    
+    printk("logging file: %s \n", target_file);
+    if (fs_open(&m_file, target_file))
     {
         LOG_ERR("Failed to Open file!");
         return -EINVAL;
     }
-    fs_write(m_file,header,sizeof(struct header_t));
+    if (fs_write(&m_file,header,sizeof(struct header_t)) < 0){
+         LOG_ERR("Failed to Write Header!");
+        return -EINVAL;
+    }
+    fs_sync(&m_file);
     m_start_session = true;
     return 0;
 }
@@ -102,14 +112,13 @@ int start_session(const char* name,const char* token)
 void close_session()
 {
     m_start_session = false;
-    fs_close(m_file);
-    m_file = NULL;
+    fs_close(&m_file);
 }
 
-void push_payload(struct sensor_value *value, enum payload_type type)
+int push_payload(struct sensor_value *value, enum payload_type type)
 {
-    if(!m_file){
-        return;
+    if(m_file.mp == NULL){
+        return -EINVAL;
     }
     u16_t llength = 0;
     switch (type)
@@ -117,25 +126,25 @@ void push_payload(struct sensor_value *value, enum payload_type type)
     case ACC_XYZ:
     case GYRO_XYZ:
         llength = sizeof(struct sensor_value) * 3 + sizeof(enum payload_type);
-        fs_write(m_file,&llength,sizeof(u16_t));
-        fs_write(m_file,&type,sizeof(enum payload_type));
-        fs_write(m_file,&value[0],sizeof(struct sensor_value));
-        fs_write(m_file,&value[1],sizeof(struct sensor_value));
-        fs_write(m_file,&value[2],sizeof(struct sensor_value));
+        fs_write(&m_file,&llength,sizeof(u16_t));
+        fs_write(&m_file,&type,sizeof(enum payload_type));
+        fs_write(&m_file,&value[0],sizeof(struct sensor_value));
+        fs_write(&m_file,&value[1],sizeof(struct sensor_value));
+        fs_write(&m_file,&value[2],sizeof(struct sensor_value));
         break;
     case ACC_GYRO_XYZ:
         llength = sizeof(struct sensor_value) * 6 + sizeof(enum payload_type);
-        fs_write(m_file,&llength,sizeof(u16_t));
-        fs_write(m_file,&type,sizeof(enum payload_type));
-        fs_write(m_file,&value[0],sizeof(struct sensor_value));
-        fs_write(m_file,&value[1],sizeof(struct sensor_value));
-        fs_write(m_file,&value[2],sizeof(struct sensor_value));
-        fs_write(m_file,&value[3],sizeof(struct sensor_value));
-        fs_write(m_file,&value[4],sizeof(struct sensor_value));
-        fs_write(m_file,&value[5],sizeof(struct sensor_value));
+        fs_write(&m_file,&llength,sizeof(u16_t));
+        fs_write(&m_file,&type,sizeof(enum payload_type));
+        fs_write(&m_file,&value[0],sizeof(struct sensor_value));
+        fs_write(&m_file,&value[1],sizeof(struct sensor_value));
+        fs_write(&m_file,&value[2],sizeof(struct sensor_value));
+        fs_write(&m_file,&value[3],sizeof(struct sensor_value));
+        fs_write(&m_file,&value[4],sizeof(struct sensor_value));
+        fs_write(&m_file,&value[5],sizeof(struct sensor_value));
         break;
     default:
         break;
     }
-
+    return fs_sync(&m_file);
 }

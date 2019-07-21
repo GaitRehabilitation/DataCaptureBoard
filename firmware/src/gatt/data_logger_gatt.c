@@ -7,8 +7,11 @@
 #include <misc/printk.h>
 #include <misc/byteorder.h>
 #include <data_logger.h>
+#include <neo_pixel.h>
 
 static struct session_config m_config;
+static struct session_device_name m_device_name;
+
 
 static ssize_t write_logger_config(struct bt_conn *conn,
 				const struct bt_gatt_attr *attr,
@@ -16,15 +19,17 @@ static ssize_t write_logger_config(struct bt_conn *conn,
 				u8_t flags){
     struct session_config *value = attr->user_data;
     if(offset + len > sizeof(struct session_config)){
+        printk("exceeded buffer \n");
         return BT_GATT_ERR(BT_ATT_ERR_INVALID_OFFSET);
     }
     memcpy(value + offset,buf,len);
+    printk("status: %i \n", value->status);
     switch(value->status){
         case START_LOGGING:
         {
             struct start_logging_payload* payload = &value->payload.start_logging;
-            payload->name[124] = '\0';
-            if(start_logging(payload->name,payload->token)){
+            m_device_name.name[59] = '\0';
+            if(start_logging(m_device_name.name,payload->token)){
                 return BT_GATT_ERR(BT_ATT_ERR_NOT_SUPPORTED);
             }
         }
@@ -34,18 +39,35 @@ static ssize_t write_logger_config(struct bt_conn *conn,
                 return BT_GATT_ERR(BT_ATT_ERR_NOT_SUPPORTED);
             }
         break;
+        case PING_LOGGING:
+            neo_blink(0,30,0,200,4);
+        break;
         case SET_DESCRIPTION: 
         {
-            char* payload = value->payload.text_payload;
-            payload[199] = '\0';
+            // char* payload = value->payload.text_payload;
+            // payload[199] = '\0';
         }
             break;
-        default:
+        default:{
             return BT_GATT_ERR(BT_ATT_ERR_NOT_SUPPORTED);
+        }
     }
     return len;   
 }
 
+
+static ssize_t write_logger_name_config(struct bt_conn *conn,
+				const struct bt_gatt_attr *attr,
+				const void *buf, u16_t len, u16_t offset,
+				u8_t flags){
+    struct session_device_name *value = attr->user_data;
+    if(offset + len > sizeof(struct session_device_name)){
+        return BT_GATT_ERR(BT_ATT_ERR_INVALID_OFFSET);
+    }
+    memcpy(value + offset,buf,len);
+    printk("logging file name: %s \n", value->name);
+    return len;
+}
 
 BT_GATT_SERVICE_DEFINE(logger_gatt,
     BT_GATT_PRIMARY_SERVICE(DATA_LOGGER_UUID),
@@ -53,6 +75,11 @@ BT_GATT_SERVICE_DEFINE(logger_gatt,
         BT_GATT_CHRC_WRITE_WITHOUT_RESP,
         BT_GATT_PERM_WRITE,
         NULL,write_logger_config,&m_config),
+    BT_GATT_CHARACTERISTIC(DATA_LOGGER_TARGET_NAME_UUID,
+        BT_GATT_CHRC_WRITE_WITHOUT_RESP,
+        BT_GATT_PERM_WRITE,
+        NULL,write_logger_name_config,&m_device_name)
+        
     // BT_GATT_CHARACTERISTIC(DATA_LOGGER_STREAM_UUID,
     //     BT_GATT_CHRC_NOTIFY | BT_GATT_CHRC_READ,
     //     BT_GATT_PERM_READ,

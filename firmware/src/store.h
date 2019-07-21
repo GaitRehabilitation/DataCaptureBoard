@@ -28,6 +28,6 @@ int file_store_init();
  */
 int start_session(const char* name,const char* token);
 void close_session();
-void push_payload(struct sensor_value* value, enum payload_type type);
+int push_payload(struct sensor_value* value, enum payload_type type);
 
 #endif

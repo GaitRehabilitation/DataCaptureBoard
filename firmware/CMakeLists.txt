@@ -12,6 +12,7 @@ src/bt.c
 src/gatt/battery_gatt.c
 src/gatt/data_logger_gatt.c
 src/data_logger.c
-src/device_targets.c)
+src/device_targets.c
+src/neo_pixel.c)
 
 target_include_directories(app PRIVATE src)

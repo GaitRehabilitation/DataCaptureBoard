@@ -85,8 +85,10 @@ class _BluetoothSearchRouteState extends State<BluetoothSearchRoute> {
             fontSize: 20
         ),
       ),
-      onTap: () {
-        callback(GaitDataCapture(device));
+      onTap: () async {
+        GaitDataCapture capture = GaitDataCapture(device);
+        await capture.connectAndDiscover();
+        callback(capture);
         Navigator.pop(context);
       },
     );

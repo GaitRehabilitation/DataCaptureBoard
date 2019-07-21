@@ -12,6 +12,7 @@
 #include "device_targets.h"
 #include "bt.h"
 #include "store.h"
+#include "data_logger.h"
 // LOG_MODULE_REGISTER(MAIN_INIT);
 
 void main(void)

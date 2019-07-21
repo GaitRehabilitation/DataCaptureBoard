@@ -1,16 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:developer' as developer;
 
+class SensorController {
+  SensorController();
+  bool isExpanded = false;
+  TextEditingController name = new TextEditingController();
+}
 
 abstract class Sensor {
   BluetoothDevice _device = null;
   Map<Guid,BluetoothService> _services = Map();
-  bool isExpanded = false;
+  final SensorController controller = new SensorController();
+  Sensor(BluetoothDevice device): _device = device;
 
-  Sensor(BluetoothDevice device): _device = device {
-  }
-
-  void connectAndDiscover() async{
+  Future<void> connectAndDiscover() async{
     await _device.connect();
     List<BluetoothService> services = await _device.discoverServices();
     for(BluetoothService service in services){
