@@ -40,10 +40,8 @@ class _HomeState extends State<HomeState>{
   }
 
   List<Widget> _panel(Sensor sensor){
-    if(!isLogging) {
-      if (sensor is GaitDataCapture) {
-        return _gaitDataCaptureWidget(sensor);
-      }
+    if (sensor is GaitDataCapture) {
+      return _gaitDataCaptureWidget(sensor);
     }
     return [];
   }
@@ -95,14 +93,14 @@ class _HomeState extends State<HomeState>{
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Expanded(child:
-                  RaisedButton(
-                    onPressed: ()async {
-                      List<Sensor> sensors = StoreProvider
-                          .of<AppState>(context)
-                          .state
-                          .sensors;
+                    RaisedButton(
+                      onPressed: ()async {
+                        List<Sensor> sensors = StoreProvider
+                            .of<AppState>(context)
+                            .state
+                            .sensors;
 
-                      if (!isLogging) {
+
                         String tokens = helpers.alphaLower() +
                             helpers.numeric() + helpers.alphaUpper();
                         String group = helpers.generateToken(5, tokens);
@@ -115,21 +113,30 @@ class _HomeState extends State<HomeState>{
                             await sensor.startLogging(group + key);
                           }
                         }
-                      } else {
+                      },
+                      child: Text(
+                        'Start'
+                      ),
+                    )
+                  ),
+                  Expanded(child:
+                    RaisedButton(
+                      onPressed: ()async {
+                        List<Sensor> sensors = StoreProvider
+                            .of<AppState>(context)
+                            .state
+                            .sensors;
+
                         for (Sensor sensor in sensors) {
                           if (sensor is GaitDataCapture) {
                             await sensor.stopLogging();
                           }
                         }
-                      }
-                      setState(() {
-                        isLogging = !isLogging;
-                      });
-                    },
-                    child: Text(
-                        isLogging ? 'Stop' : 'Start'
-                    ),
-                  )
+                      },
+                      child: Text(
+                        'Stop'
+                      ),
+                    )
                   )
                 ],
               )

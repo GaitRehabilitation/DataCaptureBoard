@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "gatt.h": "c",
+        "zephyr.h": "c",
+        "bluetooth.h": "c",
+        "byteorder.h": "c",
+        "stddef.h": "c",
+        "types.h": "c",
+        "stdio.h": "c",
+        "bt.h": "c",
+        "device_targets.h": "c",
+        "battery_gatt.h": "c",
+        "hci.h": "c",
+        "data_logger.h": "c"
+    }
+}

@@ -27,9 +27,15 @@ static ssize_t write_logger_config(struct bt_conn *conn,
     switch(value->status){
         case START_LOGGING:
         {
-            struct start_logging_payload* payload = &value->payload.start_logging;
-            m_device_name.name[59] = '\0';
-            if(start_logging(m_device_name.name,payload->token)){
+            if(!is_logging()){
+                struct start_logging_payload* payload = &value->payload.start_logging;
+                m_device_name.name[59] = '\0';
+                if(start_logging(m_device_name.name,payload->token)){
+                    return BT_GATT_ERR(BT_ATT_ERR_NOT_SUPPORTED);
+                }
+            }
+            else{
+                // error can't start another logging session
                 return BT_GATT_ERR(BT_ATT_ERR_NOT_SUPPORTED);
             }
         }

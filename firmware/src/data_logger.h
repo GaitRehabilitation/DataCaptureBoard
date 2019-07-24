@@ -4,5 +4,6 @@
 
 int start_logging(const char* name, const char* token);
 int stop_logging();
+u8_t is_logging();
 void set_capture_rate(u32_t hz);
 #endif

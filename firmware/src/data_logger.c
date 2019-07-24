@@ -10,13 +10,13 @@ static k_tid_t thread_id = NULL;
 static struct k_thread data_logger_thread_data;
 
 K_THREAD_STACK_DEFINE(data_logger_stack,DATA_LOGGER_STACK_SIZE);
-static volatile u8_t is_logging = false;
+static volatile u8_t g_is_logging = false;
 
 static void logging_thread(void * u1, void * u2, void * u3){
     // set pixel to blue to tell that the logger is logging
     set_pixel_color(0,0,20);
 
-    while(is_logging == true){
+    while(g_is_logging == true){
         k_sleep((s32_t)((1.0/250.0) * 1000.0));
         struct sensor_value value[6];        
         struct sensor_value* pos = value;
@@ -27,23 +27,27 @@ static void logging_thread(void * u1, void * u2, void * u3){
             break;
         }
     }
-    is_logging = false;
+    g_is_logging = false;
     // clear when finished
     set_pixel_color(0,0,0);
 }
 
+u8_t is_logging(){
+    return g_is_logging;
+}
+
 int stop_logging(){
-    is_logging = false;
+    g_is_logging = false;
     return 0;
 }
 
 int start_logging(const char* name, const char* token) {
     
-    if(is_logging == false){ 
+    if(g_is_logging == false){ 
         if(start_session(name,token)){
             return -EINVAL;
         }
-        is_logging = true;
+        g_is_logging = true;
         thread_id = k_thread_create(&data_logger_thread_data,
             data_logger_stack,
             K_THREAD_STACK_SIZEOF(data_logger_stack),
