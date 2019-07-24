@@ -72,11 +72,11 @@ int file_store_init(){
 }
 
 
-int start_session(const char* name,const char* token)
+int start_session(s32_t timestamp,const char* name,const char* token)
 {
     struct header_t *header = &m_header;
     // don't include \0 character 
-    strncpy(header->token,token,10);
+    memcpy(header->token,token,10);
 
     header->magic[0] = 0x10;
     header->magic[1] = 0x12;
@@ -85,11 +85,13 @@ int start_session(const char* name,const char* token)
 
     header->version = DATA_CAPTURE_0_1;
     header->size = sizeof(struct header_t) - sizeof(u16_t);
+    header->timestamp = timestamp;
 
     printk("name: %s \n", name);
 
     char token_result[5];
     strncpy(token_result,token,3);
+    token_result[3] = '\0';
     char target_file[250];
     sprintf(target_file,"/SD:/%s_%s.cap",token_result,name);
     
@@ -115,7 +117,7 @@ void close_session()
     fs_close(&m_file);
 }
 
-int push_payload(struct sensor_value *value, enum payload_type type)
+int push_payload(s64_t timestamp,struct sensor_value *value, enum payload_type type)
 {
     if(m_file.mp == NULL){
         return -EINVAL;
@@ -125,17 +127,19 @@ int push_payload(struct sensor_value *value, enum payload_type type)
     {
     case ACC_XYZ:
     case GYRO_XYZ:
-        llength = sizeof(struct sensor_value) * 3 + sizeof(enum payload_type);
+        llength = sizeof(struct sensor_value) * 3 + sizeof(enum payload_type) + sizeof(s32_t);
         fs_write(&m_file,&llength,sizeof(u16_t));
         fs_write(&m_file,&type,sizeof(enum payload_type));
+        fs_write(&m_file,&timestamp,sizeof(s32_t));
         fs_write(&m_file,&value[0],sizeof(struct sensor_value));
         fs_write(&m_file,&value[1],sizeof(struct sensor_value));
         fs_write(&m_file,&value[2],sizeof(struct sensor_value));
         break;
     case ACC_GYRO_XYZ:
-        llength = sizeof(struct sensor_value) * 6 + sizeof(enum payload_type);
+        llength = sizeof(struct sensor_value) * 6 + sizeof(enum payload_type) + sizeof(s32_t);
         fs_write(&m_file,&llength,sizeof(u16_t));
         fs_write(&m_file,&type,sizeof(enum payload_type));
+        fs_write(&m_file,&timestamp,sizeof(s32_t));
         fs_write(&m_file,&value[0],sizeof(struct sensor_value));
         fs_write(&m_file,&value[1],sizeof(struct sensor_value));
         fs_write(&m_file,&value[2],sizeof(struct sensor_value));

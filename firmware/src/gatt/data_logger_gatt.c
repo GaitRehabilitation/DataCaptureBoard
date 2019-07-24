@@ -29,7 +29,7 @@ static ssize_t write_logger_config(struct bt_conn *conn,
         {
             struct start_logging_payload* payload = &value->payload.start_logging;
             m_device_name.name[59] = '\0';
-            if(start_logging(m_device_name.name,payload->token)){
+            if(start_logging(payload->unix_time,m_device_name.name,payload->token)){
                 return BT_GATT_ERR(BT_ATT_ERR_NOT_SUPPORTED);
             }
         }
