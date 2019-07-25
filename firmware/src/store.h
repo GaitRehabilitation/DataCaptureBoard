@@ -5,7 +5,7 @@
 #include <sensor.h>
 
 enum file_version { 
-    DATA_CAPTURE_0_1 = 1,
+    DATA_CAPTURE_0_1 = (u8_t)1,
 };
 
 enum payload_type {
@@ -18,16 +18,16 @@ struct header_t{
     u16_t size;
     char magic[4];
     enum file_version version;
-    s32_t timestamp;
+    u32_t timestamp;
     char token[10];
-};
+} __packed;
 
 int file_store_init();
 /**
  *  @name name of the file to create
  *  @token hash token to identify data, note token limit is 10 characters
  */
-int start_session(s32_t timestamp,const char* name,const char* token);
+int start_session(u32_t timestamp,const char* name,const char* token);
 void close_session();
 int push_payload(s64_t timestamp,struct sensor_value* value, enum payload_type type);
 

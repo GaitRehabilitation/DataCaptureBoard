@@ -49,7 +49,7 @@
 };
 
 
-&i2c0 {
+&i2c1 {
 	status = "ok";
 	sda-pin = <5>;
 	scl-pin = <26>;
@@ -60,7 +60,7 @@
     };
 };
 
-&i2c1 {
+&i2c0 {
 	status = "ok";
 	sda-pin = <20>;
 	scl-pin = <13>;

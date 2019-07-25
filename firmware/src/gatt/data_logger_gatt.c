@@ -4,10 +4,13 @@
 #include <stddef.h>
 #include <string.h> 
 #include <errno.h>
-#include <misc/printk.h>
 #include <misc/byteorder.h>
 #include <data_logger.h>
 #include <neo_pixel.h>
+
+
+#include <logging/log.h>
+LOG_MODULE_REGISTER(DATA_LOGGER_GATT);
 
 static struct session_config m_config;
 static struct session_device_name m_device_name;
@@ -19,16 +22,15 @@ static ssize_t write_logger_config(struct bt_conn *conn,
 				u8_t flags){
     struct session_config *value = attr->user_data;
     if(offset + len > sizeof(struct session_config)){
-        printk("exceeded buffer \n");
+        LOG_INF("exceeded buffer");
         return BT_GATT_ERR(BT_ATT_ERR_INVALID_OFFSET);
     }
     memcpy(value + offset,buf,len);
-    printk("status: %i \n", value->status);
+    LOG_INF("status: %i", value->status);
     switch(value->status){
         case START_LOGGING:
         {
             struct start_logging_payload* payload = &value->payload.start_logging;
-            m_device_name.name[59] = '\0';
             if(start_logging(payload->unix_time,m_device_name.name,payload->token)){
                 return BT_GATT_ERR(BT_ATT_ERR_NOT_SUPPORTED);
             }
@@ -61,11 +63,12 @@ static ssize_t write_logger_name_config(struct bt_conn *conn,
 				const void *buf, u16_t len, u16_t offset,
 				u8_t flags){
     struct session_device_name *value = attr->user_data;
-    if(offset + len > sizeof(struct session_device_name)){
+    memset(value,0,sizeof(struct session_device_name));
+    if(offset + len - 1 > sizeof(struct session_device_name)){
         return BT_GATT_ERR(BT_ATT_ERR_INVALID_OFFSET);
     }
     memcpy(value + offset,buf,len);
-    printk("logging file name: %s \n", value->name);
+    LOG_INF("logging file name: %s", value->name);
     return len;
 }
 

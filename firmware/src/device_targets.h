@@ -29,6 +29,7 @@ int init_pwm();
 int init_bme280();
 int init_icm20948();
 int init_neo_pixel();
+int icm20948_sample_fetch();
 
 //bme280
 int bme280_retrieve_ambient_temp(struct sensor_value* value);

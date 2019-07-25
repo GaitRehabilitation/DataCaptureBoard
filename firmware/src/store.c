@@ -2,13 +2,13 @@
 #include <zephyr.h>
 #include <device.h>
 #include <disk_access.h>
-#include <logging/log.h>
 #include <fs/fs.h>
 #include <ff.h>
 #include <stdio.h>
 
 #include "store.h"
 
+#include <logging/log.h>
 LOG_MODULE_REGISTER(DATA_STORE);
 
 static FATFS fat_fs;
@@ -52,27 +52,27 @@ int file_store_init(){
 			LOG_ERR("Unable to get sector size");
 			break;
 		}
-		printk("Sector size %u\n", block_size);
+		LOG_INF("Sector size %u\n", block_size);
 
 		memory_size_mb = (u64_t)block_count * block_size;
-		printk("Memory Size(MB) %u\n", (u32_t)memory_size_mb>>20);
+		LOG_INF("Memory Size(MB) %u\n", (u32_t)memory_size_mb>>20);
 	} while (0);
     
     mp.mnt_point = disk_mount_pt;
     int res = fs_mount(&mp);
     if(res == FR_OK){
-        printk("Disk mounted.\n");
+        LOG_INF("Disk mounted.");
     }
     else
     {
-        printk("Error mounting disk.\n");
+        LOG_INF("Error mounting disk.");
     }
 
     return 0;
 }
 
 
-int start_session(s32_t timestamp,const char* name,const char* token)
+int start_session(u32_t timestamp,const char* name,const char* token)
 {
     struct header_t *header = &m_header;
     // don't include \0 character 
@@ -87,7 +87,7 @@ int start_session(s32_t timestamp,const char* name,const char* token)
     header->size = sizeof(struct header_t) - sizeof(u16_t);
     header->timestamp = timestamp;
 
-    printk("name: %s \n", name);
+    LOG_INF("name: %s", name);
 
     char token_result[5];
     strncpy(token_result,token,3);
@@ -95,12 +95,13 @@ int start_session(s32_t timestamp,const char* name,const char* token)
     char target_file[250];
     sprintf(target_file,"/SD:/%s_%s.cap",token_result,name);
     
-    printk("logging file: %s \n", target_file);
+    LOG_INF("logging file: %s", target_file);
     if (fs_open(&m_file, target_file))
     {
         LOG_ERR("Failed to Open file!");
         return -EINVAL;
     }
+    k_sleep(1000);
     if (fs_write(&m_file,header,sizeof(struct header_t)) < 0){
          LOG_ERR("Failed to Write Header!");
         return -EINVAL;

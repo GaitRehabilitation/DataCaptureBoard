@@ -79,6 +79,7 @@ class GaitDataCapture extends Sensor {
     ByteData data = ByteData.view(payload.buffer);
     DateTime time = DateTime.now();
     // epoch
+//    data.setUint16(0, time.millisecondsSinceEpoch,Endian.little);
     data.setUint32(0, time.millisecondsSinceEpoch,Endian.little);
     //token payload
     payload.setAll(4, tokenPayload);

@@ -14,6 +14,8 @@
 #include <bluetooth/uuid.h>
 #include <bluetooth/gatt.h>
 
+
+
 static struct bt_gatt_ccc_cfg  blvl_ccc_cfg[BT_GATT_CCC_MAX] = {};
 static u8_t simulate_blvl;
 static u8_t battery = 100U;
