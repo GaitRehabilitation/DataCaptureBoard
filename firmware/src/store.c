@@ -87,7 +87,7 @@ int start_session(u32_t timestamp,const char* name,const char* token)
     header->size = sizeof(struct header_t) - sizeof(u16_t);
     header->timestamp = timestamp;
 
-    LOG_INF("name: %s", name);
+    // LOG_INF("name: %s", name);
 
     char token_result[5];
     strncpy(token_result,token,3);
@@ -95,7 +95,7 @@ int start_session(u32_t timestamp,const char* name,const char* token)
     char target_file[250];
     sprintf(target_file,"/SD:/%s_%s.cap",token_result,name);
     
-    LOG_INF("logging file: %s", target_file);
+    // LOG_INF("logging file: %s", target_file);
     if (fs_open(&m_file, target_file))
     {
         LOG_ERR("Failed to Open file!");
@@ -151,5 +151,9 @@ int push_payload(s64_t timestamp,struct sensor_value *value, enum payload_type t
     default:
         break;
     }
-    return fs_sync(&m_file);
+    return 0;
+}
+
+int store_sync(){
+    return f_sync(&m_file);
 }

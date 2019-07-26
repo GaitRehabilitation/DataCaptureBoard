@@ -6,7 +6,7 @@
 #include <logging/log.h>
 LOG_MODULE_REGISTER(DATA_LOGGER);
 
-#define DATA_LOGGER_STACK_SIZE 4096
+#define DATA_LOGGER_STACK_SIZE 10000
 #define DATA_LOGGER_PRIORITY 5
 
 static k_tid_t thread_id = NULL;
@@ -20,10 +20,10 @@ static void logging_thread(void * u1, void * u2, void * u3){
     set_pixel_color(0,0,20);
     s64_t start_time = k_uptime_get();
 
-    LOG_INF("Started logging \n");
+    struct sensor_value value[6];
+    // LOG_INF("Started logging \n");
     while(g_is_logging == true){
-        k_sleep((s32_t)((1.0/250.0) * 1000.0));
-        struct sensor_value value[6];        
+        k_busy_wait((s32_t)((1.0/100.0) * 1000.0));        
         struct sensor_value* pos = value;
         icm20948_sample_fetch();
         icm20948_retrieve_acc(pos);
@@ -33,8 +33,9 @@ static void logging_thread(void * u1, void * u2, void * u3){
             break;
         }
     }
+    store_sync();
     close_session();
-    LOG_INF("stopped logging");    
+    // LOG_INF("stopped logging");    
     g_is_logging = false;
     // clear when finished
     set_pixel_color(0,0,0);

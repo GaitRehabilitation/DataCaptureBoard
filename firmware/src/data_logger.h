@@ -5,5 +5,5 @@
 int start_logging(s32_t timestamp,const char* name, const char* token);
 int stop_logging();
 bool is_logging();
-void set_capture_rate(u32_t hz);
+// void set_capture_rate(u32_t hz);
 #endif

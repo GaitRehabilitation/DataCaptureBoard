@@ -68,7 +68,7 @@ static ssize_t write_logger_name_config(struct bt_conn *conn,
         return BT_GATT_ERR(BT_ATT_ERR_INVALID_OFFSET);
     }
     memcpy(value + offset,buf,len);
-    LOG_INF("logging file name: %s", value->name);
+    // LOG_INF("logging file name: %s", value->name);
     return len;
 }
 

@@ -30,5 +30,5 @@ int file_store_init();
 int start_session(u32_t timestamp,const char* name,const char* token);
 void close_session();
 int push_payload(s64_t timestamp,struct sensor_value* value, enum payload_type type);
-
+int store_sync();
 #endif

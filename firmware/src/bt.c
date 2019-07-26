@@ -83,4 +83,5 @@ int bluetooth_init(){
     }
 
 	bt_conn_cb_register(&conn_callbacks);
+    return 0;
 }

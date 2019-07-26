@@ -12,15 +12,15 @@ static struct device* icm20948_dev;
 static struct device* neo_pixel_dev;
 static struct device* pwm_device;
 
-int init_bme280(){
-    bmp280_dev = device_get_binding(BME280_DEVICE);
-    if(bmp280_dev == NULL){
-        LOG_ERR("could not init ICM20948 device");
-        return -EINVAL;
-    }
-    LOG_INF("dev %p name %s\n", bmp280_dev, bmp280_dev->config->name);
-    return 0;
-}
+// int init_bme280(){
+//     bmp280_dev = device_get_binding(BME280_DEVICE);
+//     if(bmp280_dev == NULL){
+//         LOG_ERR("could not init ICM20948 device");
+//         return -EINVAL;
+//     }
+//     LOG_INF("dev %p name %s\n", bmp280_dev, bmp280_dev->config->name);
+//     return 0;
+// }
 
 int init_icm20948(){
     icm20948_dev = device_get_binding(ICM_20948_DEVICE);
@@ -53,26 +53,26 @@ int init_pwm(){
     return 0;
 }
 
-int bme280_retrieve_ambient_temp(struct sensor_value* value){
-    if(sensor_channel_get(bmp280_dev, SENSOR_CHAN_AMBIENT_TEMP, value)){
-        return -EINVAL;
-    }
-    return 0;
-}
+// int bme280_retrieve_ambient_temp(struct sensor_value* value){
+//     if(sensor_channel_get(bmp280_dev, SENSOR_CHAN_AMBIENT_TEMP, value)){
+//         return -EINVAL;
+//     }
+//     return 0;
+// }
 
-int bme280_retrieve_pressure(struct sensor_value* value){
-    if(sensor_channel_get(bmp280_dev, SENSOR_CHAN_PRESS, value)){
-        return -EINVAL;
-    }
-    return 0;
-}
+// int bme280_retrieve_pressure(struct sensor_value* value){
+//     if(sensor_channel_get(bmp280_dev, SENSOR_CHAN_PRESS, value)){
+//         return -EINVAL;
+//     }
+//     return 0;
+// }
 
-int bme280_retrieve_humidity(struct sensor_value* value){
-    if(sensor_channel_get(bmp280_dev, SENSOR_CHAN_HUMIDITY, value)){
-        return -EINVAL;
-    }
-    return 0;
-}
+// int bme280_retrieve_humidity(struct sensor_value* value){
+//     if(sensor_channel_get(bmp280_dev, SENSOR_CHAN_HUMIDITY, value)){
+//         return -EINVAL;
+//     }
+//     return 0;
+// }
 
 int set_pixel_color(u8_t r,u8_t g, u8_t b){
     static struct led_rgb neo_pixel_color[1];

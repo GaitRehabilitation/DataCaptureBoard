@@ -49,7 +49,7 @@
 };
 
 
-&i2c1 {
+&i2c0 {
 	status = "ok";
 	sda-pin = <5>;
 	scl-pin = <26>;
@@ -60,8 +60,8 @@
     };
 };
 
-&i2c0 {
-	status = "ok";
+&i2c1 {
+//	status = "ok";
 	sda-pin = <20>;
 	scl-pin = <13>;
 	bmp280@76 {
@@ -72,7 +72,7 @@
 };
 
 
-&spi3 {
+&spi2 {
 	status = "ok";
 	sck-pin = <7>;
 	mosi-pin = <47>;
@@ -85,7 +85,7 @@
 	};
 };
 
-&spi2 {
+&spi1 {
     status = "ok";
     sck-pin = <40>;
     mosi-pin = <21>;
