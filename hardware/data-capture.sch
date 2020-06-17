@@ -1,5 +1,5 @@
 EESchema Schematic File Version 4
-EELAYER 29 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -599,7 +599,7 @@ Wire Wire Line
 Wire Wire Line
 	4350 1050 4450 1050
 $Comp
-L Regulator_Linear:TLV70218_SOT23-5 U2
+L data-capture-rescue:TLV70218_SOT23-5-Regulator_Linear U2
 U 1 1 5C9FA53F
 P 1900 3800
 F 0 "U2" H 1900 4142 50  0000 C CNN
@@ -872,17 +872,6 @@ F 1 "GND" V 9005 1872 50  0000 R CNN
 F 2 "" H 9000 2000 50  0001 C CNN
 F 3 "" H 9000 2000 50  0001 C CNN
 	1    9000 2000
-	0    1    1    0   
-$EndComp
-$Comp
-L power:GND #PWR0145
-U 1 1 5CA160C4
-P 9000 1600
-F 0 "#PWR0145" H 9000 1350 50  0001 C CNN
-F 1 "GND" V 9005 1472 50  0000 R CNN
-F 2 "" H 9000 1600 50  0001 C CNN
-F 3 "" H 9000 1600 50  0001 C CNN
-	1    9000 1600
 	0    1    1    0   
 $EndComp
 $Comp
@@ -1605,10 +1594,10 @@ $EndComp
 Text GLabel 3550 3800 0    50   Input ~ 0
 NEO_LED
 $Comp
-L bed-sensor-rescue:Conn_ARM_JTAG_SWD_10-Connector_Specialized-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue J?
+L bed-sensor-rescue:Conn_ARM_JTAG_SWD_10-Connector_Specialized-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue J2
 U 1 1 5D0BD668
 P 2950 6150
-F 0 "J?" H 2507 6196 50  0000 R CNN
+F 0 "J2" H 2507 6196 50  0000 R CNN
 F 1 "Conn_ARM_JTAG_SWD_10-Connector_Specialized-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue-bed-sensor-rescue" H 2507 6105 50  0000 R CNN
 F 2 "Connector_PinHeader_1.27mm:PinHeader_2x05_P1.27mm_Vertical_SMD" H 3000 5600 50  0001 L TNN
 F 3 "" V 2600 4900 50  0001 C CNN
@@ -1617,10 +1606,10 @@ F 3 "" V 2600 4900 50  0001 C CNN
 $EndComp
 Connection ~ 2850 6750
 $Comp
-L Connector_Specialized:USB_B_Mini J?
+L data-capture-rescue:USB_B_Mini-Connector_Specialized J1
 U 1 1 5D0BFDB4
 P 1100 5800
-F 0 "J?" H 1157 6267 50  0000 C CNN
+F 0 "J1" H 1157 6267 50  0000 C CNN
 F 1 "USB_B_Mini" H 1157 6176 50  0000 C CNN
 F 2 "" H 1250 5750 50  0001 C CNN
 F 3 "~" H 1250 5750 50  0001 C CNN
@@ -1628,4 +1617,8 @@ F 3 "~" H 1250 5750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Connection ~ 1000 6200
+Text GLabel 3550 3400 0    50   Input ~ 0
+IMU_FSYC
+Text GLabel 9000 1600 0    50   Input ~ 0
+IMU_FSYC
 $EndSCHEMATC
